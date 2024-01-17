@@ -1,8 +1,0 @@
-
-
-subdevison 4
-zadrzi desen klik i face, izberi stranata za prst
-gore levo da stoi modelin
-pod FX Caching ima ikona excude za dodavanje na prstite
-
-selektirame cela raka mesh tool -> insert edge loop i klikame na rakata da napravime 2 lini
