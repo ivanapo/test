@@ -1,0 +1,145 @@
+
+1. Create view for finding the maximum salary from each department.
+
+SELECT * FROM 5311prep.employees;
+
+create view maxSalaryDeparments as
+	select MAX(salary) as max_salary, department_name from employees, departments
+	where employees.department_id = departments.department_id
+	group by department_name;
+
+select * from maxSalaryDeparmen
+
+
+-----------------------------------------------------------------------------
+
+
+2.Write an procedure to display employees who earn more than the average salary in that company
+
+DELIMITER //
+CREATE PROCEDURE MoreThenAVG()
+BEGIN
+	select first_name, salary,   (select AVG(salary) FROM employees) AS average_salary from employees
+	where salary > (select AVG(salary) from employees );
+END //
+DELIMITER ;
+
+call MoreThenAVG();
+
+
+----------------------------------------------------------------------------------------------
+
+
+3.Write procedure that divide people into three groups based on their salaries (groups are input parametrs for the procedure).
+
+Ex. group1, group2, group 3,  
+
+less that group1, between group1 and group 2, between group 2 and group 3, greather than group 3
+
+
+
+Kiko:
+DELIMITER //
+
+CREATE PROCEDURE salaryGroups10(IN Group1 INTEGER, IN Group2 INTEGER, IN Group3 INTEGER)
+BEGIN
+    SELECT first_name AS name, salary AS salary, CONCAT('less than ', Group1) as salary_group FROM employees
+    WHERE salary < Group1
+
+    UNION ALL
+
+    SELECT first_name AS name, salary AS salary, CONCAT('between ', Group1 , ' and ', Group2) AS salary_group FROM employees
+    WHERE salary >= Group1 AND salary < Group2
+
+    UNION ALL
+
+    SELECT first_name AS name, salary AS salary, CONCAT('between ', Group2 , ' and ', Group3) AS salary_group FROM employees
+    WHERE salary >= Group2 AND salary < Group3
+
+    UNION ALL
+
+    SELECT first_name AS name, salary AS salary, CONCAT('more than ', Group3) AS salary_group FROM employees
+    WHERE salary >= Group3;
+END //
+
+DELIMITER ;
+
+call salaryGroups10(3000,5000,10000)
+
+
+-------------------------------------------------------------------------------------
+
+
+IVAN:
+DELIMITER //
+
+CREATE PROCEDURE salaryGroups11(IN Group1 INTEGER, IN Group2 INTEGER, IN Group3 INTEGER)
+BEGIN
+    SELECT 
+        first_name AS name, 
+        salary AS salary,
+        CASE 
+            WHEN salary < Group1 THEN CONCAT('less than ', Group1)
+            WHEN salary >= Group1 AND salary < Group2 THEN CONCAT('between ', Group1, ' and ', Group2)
+            WHEN salary >= Group2 AND salary < Group3 THEN CONCAT('between ', Group2, ' and ', Group3)
+            WHEN salary >= Group3 THEN CONCAT('more than ', Group3)
+            ELSE 'Unknown Group'
+        END AS salary_group
+    FROM employees;
+END //
+
+DELIMITER ;
+
+call salaryGroups11(3000,5000,10000)
+
+
+-------------------------------------------------------------------------------
+
+
+4. create trigger for fetching when salary is updated for some employeer
+
+CREATE TABLE Employees_Loggers (
+  employee_id INT, 
+  first_name VARCHAR(60), 
+  last_name VARCHAR(60), 
+  old_salary INT,
+  new_salary INT
+);
+
+DELIMITER //
+CREATE TRIGGER Employees_Salary_Update
+AFTER UPDATE ON employees
+FOR EACH ROW
+BEGIN
+    IF NEW.salary != OLD.salary THEN
+        INSERT INTO Employees_Loggers (employee_id, first_name, last_name, old_salary, new_salary)
+        VALUES (OLD.employee_id, OLD.first_name, OLD.last_name, OLD.salary, NEW.salary);
+    END IF;
+END //
+DELIMITER ;
+
+UPDATE employees
+SET salary = 8888
+WHERE first_name = 'Guy';
+
+select * from Employees_Loggers;
+select * from employees;
+
+SHOW TRIGGERS;
+drop trigger Employees_Salary_Updatess
+
+
+--------------------------------------------------------------
+
+
+mongo :
+
+db.createCollection("employees")
+
+db.employees.insertMany([
+   { name: "Zoran", role: "CEO" },
+   { name: "Blashko", role: "Manager" },
+   { name: "Kristian", role: "Sales" },
+   { name: "Viktor", role: "Engineer" },
+   { name: "Tamara", role: "Analyst" }
+])
