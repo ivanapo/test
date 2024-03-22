@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    public class Rating : Film
+    {
+        public Rating() { }
+        public Rating(string name, string description, int year, string genre, List<decimal> ratings) : base(name, description, year, genre, ratings)
+        {
+
+        }
+
+        // Overridden PrintInfo method
+        public override void PrintInfo()
+        {
+            base.PrintInfo();
+            CalculateAVGrating(ListofRatings);
+        }
+        
+        public  void CalculateAVGrating(List<decimal> listOfRatings)
+        {
+            if (listOfRatings == null || listOfRatings.Count == 0)
+            {
+                Console.WriteLine("No ratings to calculate in the derived class.");
+                return;
+            }
+
+            decimal sum = listOfRatings.Sum();
+            decimal average = Math.Round(sum / listOfRatings.Count, 2);
+            Console.WriteLine($"Average rating: {average}");
+        }
+    }
+}
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    public class Film
+    {
+        private string Name;
+        private string Description;
+        private int Year;
+        private string Genre; 
+
+        public List<decimal> ListofRatings;
+
+
+        public string name
+        {
+            get { return Name; }
+            set
+            {
+                Name = value;
+            }
+        }
+
+        public string description
+        {
+            get { return Description; }
+            set
+            {
+                Description = value;
+            }
+        }
+
+        public int year
+        {
+            get { return Year; }
+            set
+            {
+                Year = value;
+            }
+        }
+
+        public string genre
+        {
+            get { return Genre; }
+            set
+            {
+                Genre = value;
+            }
+        }
+
+        public Film()
+        {
+            ListofRatings = new List<decimal>();
+        }
+
+        public Film(string name, string description, int year, string genre, List<decimal> ratings)
+        {
+            Name = name;
+            Description = description;
+            Year = year;
+            Genre = genre;
+
+        }
+
+        ~Film() {
+        }
+
+        public virtual void PrintInfo()
+        {
+
+
+            Console.WriteLine($"Name: {Name} \nDescription: {Description} \nYear: {Year} \nGenre: {Genre} ");
+        }
+
+        public  void CalculateAVGrating(List<decimal> ListofRatings)
+        {
+
+             
+        }
+
+
+
+    }
+
+
+
+}
+
+
+
+
+using ConsoleApp1;
+
+Film movie = new Film();
+
+Rating rating = new Rating();
+
+Console.WriteLine("Enter the name of the movie: ");
+movie.name = Console.ReadLine();
+
+Console.WriteLine("Enter the Descripton for the movie: ");
+movie.description = Console.ReadLine();
+
+Console.WriteLine("Enter the year of the movie: ");
+movie.year = Convert.ToInt32(Console.ReadLine());
+
+Console.WriteLine("Enter the Genre for the movie: ");
+movie.genre = Console.ReadLine();
+
+Console.WriteLine("Enter ratings for the movie (enter '/' to stop):");
+
+string input;
+while ((input = Console.ReadLine()) != "/")
+{
+    if (decimal.TryParse(input, out decimal ratings) && ratings <= 5)
+    {
+        rating.ListofRatings.Add(ratings);
+    }
+    else
+    {
+        Console.WriteLine("Invalid input. Please enter a rating between 1 and 5 or '/' to stop.");
+    }
+}
+
+
+rating.PrintInfo();
