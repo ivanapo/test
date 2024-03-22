@@ -1,0 +1,38 @@
+Console.Write("Enter the number of arrays: ");
+        int numberOfArrays = Convert.ToInt32(Console.ReadLine());
+        long product = 1;
+        bool isProductCalculated = false;
+
+        for (int i = 0; i < numberOfArrays; i++)
+        {
+            Console.Write($"Enter the length of array {i + 1}: ");
+            int length = Convert.ToInt32(Console.ReadLine());
+
+            if (length <= 0)
+            {
+                Console.WriteLine($"Invalid length for array {i + 1}. This array will be skipped.");
+                continue;
+            }
+
+            int[] array = new int[length];
+            Console.WriteLine($"Enter {length} numbers for array {i + 1}: ");
+            for (int j = 0; j < length; j++)
+            {
+                array[j] = Convert.ToInt32(Console.ReadLine());
+            }
+
+            if (i < length)
+            {
+                product *= array[i];
+                isProductCalculated = true;
+            }
+        }
+
+        if (isProductCalculated)
+        {
+            Console.WriteLine($"The product of the n-th elements from each array is: {product}");
+        }
+        else
+        {
+            Console.WriteLine("No product was calculated due to invalid input lengths or positions.");
+        }

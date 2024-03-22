@@ -1,0 +1,27 @@
+
+            int studentsPresent = 0;
+            int studentsAbsent = 0;
+            int presenceUnknown = 0;
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"Enter attendance for student {i + 1} (present/absent): ");
+                string attendanceStatus = Console.ReadLine().Trim().ToLower();
+
+                switch (attendanceStatus)
+                {
+                    case "present":
+                        studentsPresent++;
+                        break;
+                    case "absent":
+                        studentsAbsent++;
+                        break;
+                    default:
+                        presenceUnknown++;
+                        break;
+                }
+            }
+
+            Console.WriteLine($"Students Present: {studentsPresent}");
+            Console.WriteLine($"Students Absent: {studentsAbsent}");
+            Console.WriteLine($"Presence Unknown: {presenceUnknown}");
